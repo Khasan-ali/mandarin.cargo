@@ -1,16 +1,17 @@
-
+import React from 'react';
 import './App.css';
+import Authenticated from './Auth/Authenticated';
+import Unauthenticated from './Auth/Unauthenticated';
+import useToken from './Hooks/useToken';
 
 function App() {
+  const [token] = useToken();
 
-  // fetch('http//http://localhost:9090/teacher/getById/2')
-  // .then(res => res.json())
-  // .then(response => console.log(response))
-  console.log('okswdfwe');
-  return (
-    <>
-    </>
-  );
+  if(token) {
+    return <Authenticated />
+  }else {
+    return <Unauthenticated />
+  }
 }
 
 export default App;
