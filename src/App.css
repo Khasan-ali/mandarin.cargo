@@ -59,7 +59,7 @@ html {
     padding: 0;
     overflow-x: hidden;
     font-family: 'Poppins', sans-serif;
-    background-color: var(--color-light);
+    background: #f0eff5;
     color: var(--color-dark);
   }
   

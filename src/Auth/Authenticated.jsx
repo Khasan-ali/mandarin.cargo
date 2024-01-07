@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import Dashboard from "../Pages/Dashboard";
+import RoutePage from '../Components/RoutePage'
 import Logojon from '../Assets/Images/logo.jpg'
 import Logo from '../Assets/Images/logojon.png'
 
@@ -8,7 +10,7 @@ function Authenticated() {
         <Wrapper>
             <nav className="nav">
                 <div className="container">
-                    <img src={Logo} alt="logojon" width={'112'} />
+                    <img className="logo-nav" src={Logo} alt="logojon" />
                     <div className="search-bar">
                         <span className="material-icons-sharp">
                             search
@@ -38,6 +40,10 @@ function Authenticated() {
                     </div>
                 </div>
             </nav>
+            <main className="main">
+                <Dashboard />
+                <RoutePage />
+            </main>
         </Wrapper>
     )
 }
@@ -72,6 +78,11 @@ const Wrapper = styled.div`
     color: var(--color-gray-light);
     position: absolute;
     left: 15%;
+}
+
+.logo-nav {
+    width: 3rem;
+    height: 3rem;
 }
 
 .searchbar-input {
@@ -131,5 +142,13 @@ const Wrapper = styled.div`
 
 #menu-btn {
     display: none;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 16rem auto;
+    gap: 2rem;
+    margin: 16px auto 64px;
+    width: 96%;
 }
 `
