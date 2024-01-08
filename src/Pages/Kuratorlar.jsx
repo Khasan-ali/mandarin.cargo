@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-// import logo from '../Assets/Images/logo.jpg'
 
 function Kurator() {
+    const [openModal, setOpenModal] = React.useState(false)
 
     const [teach, setTeach] = React.useState([])
 
@@ -12,6 +12,22 @@ function Kurator() {
             .then(response => setTeach(response.content))
 
     }, [])
+
+
+    // DELETE TEACHER FUNCTION
+    const [deleteId, setDeleteId] = React.useState('')
+
+    function deleteTeach() {
+        fetch(`http://localhost:9090/teacher/deleteById/${deleteId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+
+        setOpenModal(false)
+    }
+    
 
     // async function teachers(evt) {
     //     evt.preventDefault()
@@ -44,7 +60,7 @@ function Kurator() {
                     <button type="submit">Add Teacher</button>
                 </form> */}
                 <div className="table-header">
-                <h2>Kurator page</h2>
+                    <h2>Kurator page</h2>
                 </div>
                 <div className="teacher-render">
                     <table className="teach-table">
@@ -54,6 +70,7 @@ function Kurator() {
                                 <th className="table-th">FullName</th>
                                 <th className="table-th">Code</th>
                                 <th className="table-th">Student number</th>
+                                <th className="table-th">Delete</th>
                             </tr>
                         </thead>
 
@@ -67,11 +84,30 @@ function Kurator() {
                                     </td>
                                     <td>{row.code}</td>
                                     <td>200</td>
+                                    <td className="teacher-delete-td">
+                                        <span id={row.id} onClick={() => { setDeleteId(row.id); setOpenModal(true) }} className="material-icons-sharp teacher-delede-icon">delete</span>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
+
+                {openModal && <div className="delete-modal">
+                    <div className="delete-section">
+                        <div className="modal-section-top">
+                            <div className="modal-delete-bg">
+                                <span className="material-icons-sharp modal-delete-icon">delete</span>
+                            </div>
+                            <h4 className="delete-modal-desc">You are about to delete a product</h4>
+                        </div>
+                        <div className="delete-modal-icon-section">
+                            <button onClick={() => setOpenModal(false)} className="modal-cancel-btn" >Cancel</button>
+                            <button onClick={deleteTeach} className="modal-delete-btn">Delete</button>
+                        </div>
+                    </div>
+                </div>}
+                {openModal && <div onClick={() => setOpenModal(false)} className="modal-blur"></div>}
             </div>
         </Wrapper>
     )
@@ -81,6 +117,7 @@ export default Kurator
 
 const Wrapper = styled.div`
     .teach-container {
+        position: relative;
         width: 82vw;
         height: 100vh;
         background-color: #fff5;
@@ -91,14 +128,6 @@ const Wrapper = styled.div`
 
         overflow: hidden;
     }
-
-    /* .teacher-render {
-        min-height: 100vh;
-        background: url() center / cover;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    } */
 
     .table-header {
         width: 100%;
@@ -166,11 +195,105 @@ const Wrapper = styled.div`
 
     .teach-tbody-tr:hover {
         opacity: 0.8;
-    }
+    }   
 
     .table-fullname {
         display: flex;
         align-items: center;
     }
 
+    .teacher-delede-icon {
+        margin-left: 10px;
+        color: #dc0000;
+    }
+
+    /* DELETE MODAL */
+    .modal-blur {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9;
+        background-color: rgba(0, 0, 0, 0.6);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+        width: 82vw;
+        height: 100vh;
+        transition: 0.8s;
+    }
+
+    .delete-modal {
+        position: absolute;
+        left: 50%;
+        top: 25%;
+        transform: translate(-50%);
+        z-index: 10;
+        width: 28vw;
+        background-color: var(--color-white);
+        border-radius: .6rem;
+    }
+
+    .delete-section {
+        padding: 1.2rem;
+    }
+
+    .modal-section-top {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .delete-modal-icon-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-left: auto;
+        margin-top: 20px;
+        max-width: 190px;
+        width: 100%;
+    }
+
+    .modal-delete-bg {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+
+        max-width: 60px;
+        width: 100%;
+        height: 60px;
+        background-color: var(--color-light);
+        border-radius: 50%;
+    }
+    
+    .modal-delete-icon {
+        color: #dc0000;
+    }
+
+    .modal-cancel-btn {
+        padding: 8px 20px;
+        border-radius: .6rem;
+        background-color: var(--color-light);
+        color: var(--color-gray-light);
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .modal-delete-btn {
+        padding: 8px 20px;
+        border-radius: .6rem;
+        background-color: var(--color-danger);
+        color: var(--color-white);
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .modal-delete-btn:hover {
+        opacity: 0.8;
+    }
+
+    .modal-cancel-btn:hover {
+        opacity: 0.8;
+    }
 `
